@@ -8,25 +8,25 @@ body {
 }
 
 .app {
-    background-color: #000;
     color: #FFF;
     font-family: quest;
     font-size: 30px;
     padding: 50px;
     text-align: center;
+    margin-left: 300px;
 }
 
 .app .logo {
     height: 220px;
-    filter: drop-shadow(2px 2px 0px #FFF);
+    filter: drop-shadow(3px 3px 3px #a9a9a9);
 }
 
 .app h1 {
-    color: #61DAFB;
+    color: #398195;
     font-size: 5em;
     letter-spacing: 5px;
     margin: 0.16em;
-    text-shadow: 2px 2px 0 #FFF;
+    text-shadow: 3px 3px 3px #a9a9a9;
 }
 
 .rotate {
