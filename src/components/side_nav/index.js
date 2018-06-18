@@ -10,8 +10,32 @@ class SideNav extends Component {
         this.startPos = -100;
 
         this.state = {
-            pos: this.startPos - this.offset,
-            transition: 0
+            pos: this.setPos(),
+            transitionDuration: 600
+        }
+    }
+
+    componentDidMount(){
+        window.onresize = this.handleWindowResize.bind(this);
+    }
+
+    setPos(){
+        if(window.innerWidth > 800){
+            return 0;
+        }
+
+        return this.startPos - this.offset;
+    }
+
+    handleWindowResize(e){
+        const { pos } = this.state;
+        const width = window.innerWidth;
+        console.log('Resize:', width);
+
+        if(pos < 0 && width > 800 || pos >= 0 && width <= 800){
+            this.setState({
+                pos: this.setPos()
+            });
         }
     }
 
@@ -33,18 +57,20 @@ class SideNav extends Component {
         const totalDistance = this.width + this.offset;
         const ppms = distance/time;
         const remainingDistance = totalDistance - distance;
-        const transition =  remainingDistance / ppms;
+        const transitionDuration =  remainingDistance / ppms;
+
+        console.log('Transition:', transitionDuration);
 
         this.setState({
             pos: 0,
-            transition
+            transitionDuration
         });
     }
 
     render(){
 
         const sideNavStyle = {
-            transitionDuration: `${this.state.transition}ms`,
+            transitionDuration: `${this.state.transitionDuration}ms`,
             transform: `translate(${this.state.pos}%)`
         };
 

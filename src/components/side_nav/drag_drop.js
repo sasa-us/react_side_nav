@@ -32,6 +32,8 @@ class DragDrop extends Component {
         console.log('Drag End:', e.screenX);
         const timeElapsed = new Date().getTime() - this.startTime;
         const distance = e.screenX - this.start
+
+        console.log('Distance:', distance, timeElapsed);
         this.props.open(timeElapsed, distance);
     }
 
