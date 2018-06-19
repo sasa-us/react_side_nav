@@ -1,9 +1,6 @@
 .side-nav-container {
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    background-color: rgba(0, 0, 0, .7);
-    z-index: 991;
+    transition-duration: 800ms;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .side-nav {
@@ -35,6 +32,7 @@
 }
 
 .side-nav ul li {
+    cursor: pointer;
     padding: 15px 30px;
     transition-duration: 400ms;
     /* border-right: 3px solid white; */
@@ -56,7 +54,12 @@
 }
 
 @media screen and (max-width: 800px){
-    /* .side-nav {
-        transform: translateX(-105%)
-    } */
+
+    .side-nav-container {
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        background-color: rgba(0, 0, 0, .7);
+        z-index: 991;
+    }
 }

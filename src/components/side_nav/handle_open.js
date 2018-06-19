@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './drag_drop.css';
+import './handle_open.css';
 
 class DragDrop extends Component {
     constructor(props){
@@ -14,13 +14,11 @@ class DragDrop extends Component {
     }
 
     handleDragStart(e) {
-        console.log('Drag Start!', e.screenX);
         this.start = e.screenX;
         this.startTime = new Date().getTime();
     }
 
     handleDrag(e) {
-        // console.log('Dragging!', e.screenX);
         const pos = e.screenX;
 
         if(pos > this.start){
@@ -29,16 +27,13 @@ class DragDrop extends Component {
     }
 
     handleDragEnd(e){
-        console.log('Drag End:', e.screenX);
         const timeElapsed = new Date().getTime() - this.startTime;
         const distance = e.screenX - this.start
 
-        console.log('Distance:', distance, timeElapsed);
         this.props.open(timeElapsed, distance);
     }
 
     handleTouchStart(e){
-        console.log('Touch Event:', e.targetTouches);
         const touch = e.targetTouches[0];
 
         this.start = touch.clientX;
@@ -46,7 +41,6 @@ class DragDrop extends Component {
     }
 
     handleTouchMove(e){
-        // console.log('Moving:', e.targetTouches[0].clientX);
         this.lastPos = e.targetTouches[0].clientX;
 
         if (this.lastPos > this.start) {
@@ -55,7 +49,6 @@ class DragDrop extends Component {
     }
 
     handleTouchEnd(e){
-        console.log('Drag End:', e);
         const timeElapsed = new Date().getTime() - this.startTime;
         const distance = this.lastPos - this.start
         this.props.open(timeElapsed, distance);

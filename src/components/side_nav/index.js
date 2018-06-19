@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import DragDrop from './drag_drop';
+import HandleOpen from './handle_open';
+import HandleClose from './handle_close';
 import './side_nav.css';
 
 class SideNav extends Component {
@@ -49,7 +50,8 @@ class SideNav extends Component {
         }
 
         this.setState({
-            pos: change
+            pos: change,
+            transitionDuration: 0
         });
     }
 
@@ -57,7 +59,8 @@ class SideNav extends Component {
         const totalDistance = this.width + this.offset;
         const ppms = distance/time;
         const remainingDistance = totalDistance - distance;
-        const transitionDuration =  remainingDistance / ppms;
+        const duration = remainingDistance / ppms;
+        const transitionDuration =  duration < 1000 ? duration : 800
 
         console.log('Transition:', transitionDuration);
 
@@ -67,31 +70,38 @@ class SideNav extends Component {
         });
     }
 
+    linkClick(num){
+        console.log(`Link ${num} Clicked`);
+    }
+
     render(){
+        const { pos, transitionDuration } = this.state;
 
         const sideNavStyle = {
-            transitionDuration: `${this.state.transitionDuration}ms`,
-            transform: `translate(${this.state.pos}%)`
+            transitionDuration: `${transitionDuration}ms`,
+            transform: `translate(${pos}%)`
         };
 
         return (
-            <div>
-                <DragDrop open={this.open.bind(this)} slideOut={this.slideOut.bind(this)} />
-                <div style={sideNavStyle} className="side-nav">
-                    <div className="top-section">
-                        <span>L</span>
-                        <span>F</span>
+            <div className={ window.innerWidth <= 800 && pos > -100 ? `side-nav-container` : ''}>
+                <HandleOpen open={this.open.bind(this)} slideOut={this.slideOut.bind(this)} />
+                <HandleClose>
+                    <div style={sideNavStyle} className="side-nav">
+                        <div className="top-section">
+                            <span>L</span>
+                            <span>F</span>
+                        </div>
+                        <ul>
+                            <li onClick={this.linkClick.bind(this, 1)}>Link 1</li>
+                            <li onClick={this.linkClick.bind(this, 2)}>Link 2</li>
+                            <li onClick={this.linkClick.bind(this, 3)}>Link 3</li>
+                            <li onClick={this.linkClick.bind(this, 4)}>Link 4</li>
+                        </ul>
+                        <div className="footer">
+                            &copy; 2018 LearningFuze
+                        </div>
                     </div>
-                    <ul>
-                        <li>Link 1</li>
-                        <li>Link 2</li>
-                        <li>Link 3</li>
-                        <li>Link 4</li>
-                    </ul>
-                    <div className="footer">
-                        &copy; 2018 LearningFuze
-                    </div>
-                </div>
+                </HandleClose>
             </div>
         )
     }
