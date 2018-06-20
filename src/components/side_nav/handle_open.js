@@ -19,6 +19,7 @@ class DragDrop extends Component {
     }
 
     handleDrag(e) {
+        e.preventDefault();
         const pos = e.screenX;
 
         if(pos > this.start){
@@ -55,16 +56,16 @@ class DragDrop extends Component {
     }
 
     render(){
-        return ( <div
-            className="drag-target"
-            draggable
-            onDragStart={this.handleDragStart}
-            onDrag={this.handleDrag}
-            onDragEnd={this.handleDragEnd}
-            onTouchStart={this.handleTouchStart}
-            onTouchMove={this.handleTouchMove}
-            onTouchEnd={this.handleTouchEnd}
-            // onTouchEndCapture={this.handleTouchEnd}
+        return ( 
+            <div
+                className="drag-target"
+                draggable
+                onDragStart={this.handleDragStart}
+                onDrag={this.handleDrag}
+                onDragEnd={this.handleDragEnd}
+                onTouchStart={this.handleTouchStart}
+                onTouchMove={this.handleTouchMove}
+                onTouchEnd={this.handleTouchEnd}
             ></div>
         )
     }

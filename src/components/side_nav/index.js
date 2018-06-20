@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import HandleOpen from './handle_open';
 import HandleClose from './handle_close';
+import Hamburger from './hamburger';
 import './side_nav.css';
 
 class SideNav extends Component {
@@ -9,35 +10,106 @@ class SideNav extends Component {
         this.width = 300;
         this.offset = 5;
         this.startPos = -100;
+        this.maxScreenSize = 800;
+        this.defaultTransition = 800;
+        this.maxTransition = 1000;
+
+        const pos = this.setPos();
 
         this.state = {
-            pos: this.setPos(),
-            transitionDuration: 600
+            open: pos === 0,
+            pos,
+            transitionDuration: this.defaultTransition,
+            moving: false
         }
+
+        this.close = this.close.bind(this);
+        this.clickClose = this.clickClose.bind(this);
+        this.handleWindowResize = this.handleWindowResize.bind(this);
+        this.open = this.open.bind(this);
+        this.slideIn = this.slideIn.bind(this);
+        this.slideOut = this.slideOut.bind(this);
     }
 
     componentDidMount(){
-        window.onresize = this.handleWindowResize.bind(this);
+        window.onresize = this.handleWindowResize;
+    }
+
+    close() {
+        this.setState({
+            pos: this.startPos - this.offset,
+            transitionDuration: this.defaultTransition,
+            open: false,
+            moving: true
+        });
+
+        setTimeout(() => this.setState({ moving: false }), this.defaultTransition);
+    }
+
+    clickClose(e) {
+        if (this.state.open) {
+            console.log('CLICKED TO CLOSE!');
+            this.close();
+        }
+    }
+
+    handleWindowResize(e) {
+        const { pos } = this.state;
+        const width = window.innerWidth;
+
+        if (pos < 0 && width > this.maxScreenSize || pos >= 0 && width <= this.maxScreenSize) {
+            const newPos = this.setPos();
+
+            this.setState({
+                open: newPos === 0,
+                pos: newPos
+            });
+        }
+    }
+
+    linkClick(num) {
+        console.log(`Link ${num} Clicked`);
+    }
+
+    open(time, distance) {
+        const totalDistance = this.width + this.offset;
+        const ppms = distance / time;
+        const remainingDistance = totalDistance - distance;
+        const duration = remainingDistance / ppms;
+        const transitionDuration = duration <= this.maxTransition ? duration : this.defaultTransition;
+
+        this.setState({
+            pos: 0,
+            transitionDuration,
+            open: true,
+            moving: true
+        });
+
+        setTimeout(() => this.setState({moving: false}), transitionDuration);
     }
 
     setPos(){
-        if(window.innerWidth > 800){
+        if(window.innerWidth > this.maxScreenSize){
             return 0;
         }
 
         return this.startPos - this.offset;
     }
 
-    handleWindowResize(e){
-        const { pos } = this.state;
-        const width = window.innerWidth;
-        console.log('Resize:', width);
+    slideIn(xPos) {
+        if (!this.state.open) return;
 
-        if(pos < 0 && width > 800 || pos >= 0 && width <= 800){
-            this.setState({
-                pos: this.setPos()
-            });
+        let change = -((xPos / this.width) * 100);
+
+        if (change > 0) {
+            change = 0;
         }
+
+        this.setState({
+            pos: change,
+            transitionDuration: 0,
+            moving: true
+        });
     }
 
     slideOut(xPos){
@@ -45,37 +117,19 @@ class SideNav extends Component {
 
         let change = this.startPos + ((xPos / this.width) * 100);
 
-        if(change >= 0){
+        if(change > 0){
             change = 0
         }
 
         this.setState({
             pos: change,
-            transitionDuration: 0
+            transitionDuration: 0,
+            moving: true
         });
-    }
-
-    open(time, distance){
-        const totalDistance = this.width + this.offset;
-        const ppms = distance/time;
-        const remainingDistance = totalDistance - distance;
-        const duration = remainingDistance / ppms;
-        const transitionDuration =  duration < 1000 ? duration : 800
-
-        console.log('Transition:', transitionDuration);
-
-        this.setState({
-            pos: 0,
-            transitionDuration
-        });
-    }
-
-    linkClick(num){
-        console.log(`Link ${num} Clicked`);
     }
 
     render(){
-        const { pos, transitionDuration } = this.state;
+        const { pos, transitionDuration, open, moving } = this.state;
 
         const sideNavStyle = {
             transitionDuration: `${transitionDuration}ms`,
@@ -83,9 +137,10 @@ class SideNav extends Component {
         };
 
         return (
-            <div className={ window.innerWidth <= 800 && pos > -100 ? `side-nav-container` : ''}>
-                <HandleOpen open={this.open.bind(this)} slideOut={this.slideOut.bind(this)} />
-                <HandleClose>
+            <div onClick={this.clickClose} className={ `side-nav-container ${window.innerWidth <= this.maxScreenSize && pos > this.startPos ? `open` : ''}`}>
+                <Hamburger visible={!open && !moving} open={this.open}/>
+                <HandleOpen open={this.open} slideOut={this.slideOut} />
+                <HandleClose slideIn={this.slideIn} close={this.close}>
                     <div style={sideNavStyle} className="side-nav">
                         <div className="top-section">
                             <span>L</span>

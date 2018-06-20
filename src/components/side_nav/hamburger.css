@@ -1,0 +1,33 @@
+.hamburger {
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    position: absolute;
+    z-index: 1001;
+    top: 18px;
+    left: 18px;
+    visibility: visible;
+    transition-duration: 100ms;
+}
+
+.hamburger.hidden {
+    visibility: hidden;
+}
+
+.hamburger > div {
+    width: 21px;
+    height: 3px;
+    background-color: rgba(0, 0, 0, 0.14);
+    margin: 6px 6px;
+}
+
+.hamburger:hover {
+    background-color: rgba(0, 0, 0, 0.14);
+    border-color: #fff;
+    display: inline-block;
+}
+
+.hamburger:hover > div {
+    background-color: #fff;
+}

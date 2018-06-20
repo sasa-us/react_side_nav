@@ -1,6 +1,9 @@
 .side-nav-container {
     transition-duration: 800ms;
     background-color: rgba(0, 0, 0, 0);
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
 }
 
 .side-nav {
@@ -55,10 +58,9 @@
 
 @media screen and (max-width: 800px){
 
-    .side-nav-container {
+    .side-nav-container.open {
         height: 100vh;
         width: 100vw;
-        position: fixed;
         background-color: rgba(0, 0, 0, .7);
         z-index: 991;
     }

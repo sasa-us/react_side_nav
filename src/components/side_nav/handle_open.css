@@ -1,5 +1,5 @@
 .drag-target {
-    width: 35px;
+    width: 55px;
     position: fixed;
     height: 100vh;
     /* border-right: 1px solid black; */
@@ -7,4 +7,3 @@
     left: 0;
     z-index: 1000;
 }
-
