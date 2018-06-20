@@ -59,7 +59,6 @@ class SideNav extends Component {
 
     clickClose(e) {
         if (this.state.open) {
-            console.log('CLICKED TO CLOSE!');
             this.close();
         }
     }
