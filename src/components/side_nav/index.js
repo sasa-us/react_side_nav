@@ -137,9 +137,9 @@ class SideNav extends Component {
         };
 
         return (
-            <div onClick={this.clickClose} className={ `side-nav-container ${window.innerWidth <= this.maxScreenSize && pos > this.startPos ? `open` : ''}`}>
+            <div onClick={this.clickClose} className={ `side-nav-container ${window.innerWidth <= this.maxScreenSize && pos > this.startPos ? `open` : ''} ${moving || open ? 'on-top' : ''}`}>
                 <Hamburger visible={!open && !moving} open={this.open}/>
-                <HandleOpen open={this.open} slideOut={this.slideOut} />
+                <HandleOpen open={this.open} close={this.close} slideOut={this.slideOut} />
                 <HandleClose slideIn={this.slideIn} close={this.close}>
                     <div style={sideNavStyle} className="side-nav">
                         <div className="top-section">

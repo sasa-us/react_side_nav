@@ -5,6 +5,8 @@ class DragDrop extends Component {
     constructor(props){
         super(props);
 
+        this.minDistance = 40;
+
         this.handleDragStart = this.handleDragStart.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
@@ -51,8 +53,13 @@ class DragDrop extends Component {
 
     handleTouchEnd(e){
         const timeElapsed = new Date().getTime() - this.startTime;
-        const distance = this.lastPos - this.start
-        this.props.open(timeElapsed, distance);
+        const distance = this.lastPos - this.start;
+        
+        if(!isNaN(distance) && distance > this.minDistance){
+            return this.props.open(timeElapsed, distance);
+        }
+        
+        this.props.close();
     }
 
     render(){
