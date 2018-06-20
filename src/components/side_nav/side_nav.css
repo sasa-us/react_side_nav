@@ -56,6 +56,10 @@
     padding: 15px;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 @media screen and (max-width: 800px){
 
     .side-nav-container.open {

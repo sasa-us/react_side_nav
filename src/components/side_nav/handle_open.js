@@ -65,7 +65,7 @@ class DragDrop extends Component {
     render(){
         return ( 
             <div
-                className="drag-target"
+                className={`drag-target ${this.props.visible ? '' : 'hidden'}`}
                 draggable
                 onDragStart={this.handleDragStart}
                 onDrag={this.handleDrag}

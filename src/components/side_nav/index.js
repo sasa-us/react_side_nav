@@ -35,7 +35,18 @@ class SideNav extends Component {
         window.onresize = this.handleWindowResize;
     }
 
-    close() {
+    calcTransition(time, distance){
+        const totalDistance = this.width + this.offset;
+        const ppms = distance / time;
+        const remainingDistance = totalDistance - distance;
+        const duration = remainingDistance / ppms;
+        
+        return duration <= this.maxTransition ? duration : this.defaultTransition;
+    }
+
+    close(time, distance) {
+        const transitionDuration = this.calcTransition(time);
+
         this.setState({
             pos: this.startPos - this.offset,
             transitionDuration: this.defaultTransition,
@@ -72,11 +83,7 @@ class SideNav extends Component {
     }
 
     open(time, distance) {
-        const totalDistance = this.width + this.offset;
-        const ppms = distance / time;
-        const remainingDistance = totalDistance - distance;
-        const duration = remainingDistance / ppms;
-        const transitionDuration = duration <= this.maxTransition ? duration : this.defaultTransition;
+        const transitionDuration = this.calcTransition(time, distance);
 
         this.setState({
             pos: 0,
@@ -139,8 +146,8 @@ class SideNav extends Component {
         return (
             <div onClick={this.clickClose} className={ `side-nav-container ${window.innerWidth <= this.maxScreenSize && pos > this.startPos ? `open` : ''} ${moving || open ? 'on-top' : ''}`}>
                 <Hamburger visible={!open && !moving} open={this.open}/>
-                <HandleOpen open={this.open} close={this.close} slideOut={this.slideOut} />
-                <HandleClose slideIn={this.slideIn} close={this.close}>
+                <HandleOpen visible={!open && !moving} open={this.open} close={this.close} slideOut={this.slideOut} />
+                <HandleClose open={this.open} close={this.close} slideIn={this.slideIn}>
                     <div style={sideNavStyle} className="side-nav">
                         <div className="top-section">
                             <span>L</span>

@@ -11,10 +11,6 @@
     transition-duration: 100ms;
 }
 
-.hamburger.hidden {
-    visibility: hidden;
-}
-
 .hamburger > div {
     width: 21px;
     height: 3px;

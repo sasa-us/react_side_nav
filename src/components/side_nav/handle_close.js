@@ -13,7 +13,7 @@ class HandleClose extends Component {
     }
 
     touchStart(e){
-        this.start = e.targetTouches[0].clientX;
+        this.start = this.lastPos = e.targetTouches[0].clientX;
         this.startTime = new Date().getTime();
     }
 
@@ -27,13 +27,11 @@ class HandleClose extends Component {
         const timeElapsed = new Date().getTime() - this.startTime;
         const distance = this.start - this.lastPos;
 
-        console.log('TOUCH END CLOSE:', distance);
         if (!isNaN(distance) && distance > this.minDistance) {
             return this.props.close(timeElapsed, distance);
         } 
 
-        // this.props.close();
-        // this.props.close();
+        this.props.open(0, 0);
     }
 
     preventClick(e){
