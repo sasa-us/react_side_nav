@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './handle_close.css';
 
 class HandleClose extends Component {
     constructor(props){
         super(props);
 
-        this.minDistance = 40;
+        this.minXDistance = props.minX;
+        this.maxYDistance = props.maxY;
 
         this.touchStart = this.touchStart.bind(this);
         this.touchMove = this.touchMove.bind(this);
@@ -13,25 +15,28 @@ class HandleClose extends Component {
     }
 
     touchStart(e){
-        this.start = this.lastPos = e.targetTouches[0].clientX;
+        this.startX = this.lastPos = e.targetTouches[0].clientX;
+        this.startY = this.lastPosY = e.targetTouches[0].clientY;
         this.startTime = new Date().getTime();
     }
 
     touchMove(e){
-        this.lastPos = e.targetTouches[0].clientX;
+        this.lastPosX = e.targetTouches[0].clientX;
+        this.lastPosY = this.lastPosY = e.targetTouches[0].clientY;
 
-        this.props.slideIn(this.start - this.lastPos);
+        this.props.slideIn(this.startX - this.lastPosX);
     }
 
     touchEnd(e){
         const timeElapsed = new Date().getTime() - this.startTime;
-        const distance = this.start - this.lastPos;
+        const distanceX = this.startX - this.lastPosX;
+        const distanceY = Math.abs(this.startY - this.lastPosY);
 
-        if (!isNaN(distance) && distance > this.minDistance) {
-            return this.props.close(timeElapsed, distance);
-        } 
-
-        this.props.open(0, 0);
+        if (distanceY < this.maxYDistance && !isNaN(distanceX) && distanceX > this.minXDistance) {
+            return this.props.close(timeElapsed, distanceX);
+        } else if(this.props.isOpen && distanceX > 0){
+            this.props.open(0, 0);
+        }
     }
 
     preventClick(e){
@@ -42,7 +47,6 @@ class HandleClose extends Component {
         return (
             <div
                 className="side-nav-close"
-                draggable
                 onClick={this.preventClick}
                 onTouchStart={this.touchStart}
                 onTouchMove={this.touchMove}
@@ -53,5 +57,15 @@ class HandleClose extends Component {
         );
     }
 }
+
+HandleClose.defaultProps = {
+    minX: 40,
+    maxY: 100
+};
+
+HandleClose.propTypes = {
+    minX: PropTypes.number.isRequired,
+    maxY: PropTypes.number.isRequired
+};
 
 export default HandleClose;

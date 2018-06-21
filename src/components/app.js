@@ -5,7 +5,7 @@ import SideNav from './side_nav';
 
 const App = () => (
     <div>
-        <SideNav/>
+        <SideNav />
         <div className="app">
             <img src={logo} className="logo rotate"/>
             <h1>Welcome to React</h1>

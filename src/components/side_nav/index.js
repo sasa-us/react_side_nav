@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import HandleOpen from './handle_open';
 import HandleClose from './handle_close';
 import Hamburger from './hamburger';
+import SideNav from './side_nav';
 import './side_nav.css';
 
-class SideNav extends Component {
+class SideNavContainer extends Component {
     constructor(props){
         super(props);
-        this.width = 300;
-        this.offset = 5;
-        this.startPos = -100;
-        this.maxScreenSize = 800;
-        this.defaultTransition = 800;
-        this.maxTransition = 1000;
+        
+        this.width = props.navWidth;
+        this.offset = props.navOffset;
+        this.startPos = props.navStartPos;
+        this.maxScreenSize = props.hiddenNavMaxScreenWidth;
+        this.defaultTransition = props.defaultTransition;
+        this.maxTransition = props.maxTransition;
 
         const pos = this.setPos();
+        const isOpen = pos === 0;
 
         this.state = {
-            open: pos === 0,
+            open: isOpen,
+            largeScreen: isOpen,
             pos,
             transitionDuration: this.defaultTransition,
             moving: false
@@ -45,11 +50,13 @@ class SideNav extends Component {
     }
 
     close(time, distance) {
-        const transitionDuration = this.calcTransition(time);
+        if(this.state.largeScreen) return;
+
+        const transitionDuration = this.calcTransition(time, distance);
 
         this.setState({
             pos: this.startPos - this.offset,
-            transitionDuration: this.defaultTransition,
+            transitionDuration,
             open: false,
             moving: true
         });
@@ -58,7 +65,7 @@ class SideNav extends Component {
     }
 
     clickClose(e) {
-        if (this.state.open) {
+        if (this.state.open && !this.state.largeScreen) {
             this.close();
         }
     }
@@ -69,19 +76,19 @@ class SideNav extends Component {
 
         if (pos < 0 && width > this.maxScreenSize || pos >= 0 && width <= this.maxScreenSize) {
             const newPos = this.setPos();
+            const isOpen = newPos === 0;
 
             this.setState({
-                open: newPos === 0,
+                open: isOpen,
+                largeScreen: isOpen,
                 pos: newPos
             });
         }
     }
 
-    linkClick(num) {
-        console.log(`Link ${num} Clicked`);
-    }
-
     open(time, distance) {
+        if (this.state.largeScreen) return;
+
         const transitionDuration = this.calcTransition(time, distance);
 
         this.setState({
@@ -103,7 +110,7 @@ class SideNav extends Component {
     }
 
     slideIn(xPos) {
-        if (!this.state.open) return;
+        if (!this.state.open || this.state.largeScreen) return;
 
         let change = -((xPos / this.width) * 100);
 
@@ -119,7 +126,7 @@ class SideNav extends Component {
     }
 
     slideOut(xPos){
-        if(this.state.pos >= 0) return;
+        if(this.state.pos >= 0 || this.state.largeScreen) return;
 
         let change = this.startPos + ((xPos / this.width) * 100);
 
@@ -144,28 +151,32 @@ class SideNav extends Component {
 
         return (
             <div onClick={this.clickClose} className={ `side-nav-container ${window.innerWidth <= this.maxScreenSize && pos > this.startPos ? `open` : ''} ${moving || open ? 'on-top' : ''}`}>
-                <Hamburger visible={!open && !moving} open={this.open}/>
+                <Hamburger transition={transitionDuration} visible={!open && !moving} open={this.open}/>
                 <HandleOpen visible={!open && !moving} open={this.open} close={this.close} slideOut={this.slideOut} />
-                <HandleClose open={this.open} close={this.close} slideIn={this.slideIn}>
-                    <div style={sideNavStyle} className="side-nav">
-                        <div className="top-section">
-                            <span>L</span>
-                            <span>F</span>
-                        </div>
-                        <ul>
-                            <li onClick={this.linkClick.bind(this, 1)}>Link 1</li>
-                            <li onClick={this.linkClick.bind(this, 2)}>Link 2</li>
-                            <li onClick={this.linkClick.bind(this, 3)}>Link 3</li>
-                            <li onClick={this.linkClick.bind(this, 4)}>Link 4</li>
-                        </ul>
-                        <div className="footer">
-                            &copy; 2018 LearningFuze
-                        </div>
-                    </div>
+                <HandleClose isOpen={open} open={this.open} close={this.close} slideIn={this.slideIn}>
+                    <SideNav close={this.close} style={sideNavStyle} />
                 </HandleClose>
             </div>
         )
     }
 }
 
-export default SideNav;
+SideNavContainer.defaultProps = {
+    navWidth: 300,
+    navOffset: 5,
+    navStartPos: -100,
+    hiddenNavMaxScreenWidth: 800,
+    defaultTransition: 800,
+    maxTransition: 1000
+};
+
+SideNavContainer.propTypes = {
+    navWidth: PropTypes.number.isRequired,
+    navOffset: PropTypes.number.isRequired,
+    navStartPos: PropTypes.number.isRequired,
+    hiddenNavMaxScreenWidth: PropTypes.number.isRequired,
+    defaultTransition: PropTypes.number.isRequired,
+    maxTransition: PropTypes.number.isRequired
+}
+
+export default SideNavContainer;
