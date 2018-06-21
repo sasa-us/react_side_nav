@@ -15,13 +15,18 @@ class HandleClose extends Component {
     }
 
     touchStart(e){
-        this.startX = this.lastPos = e.targetTouches[0].clientX;
-        this.startY = this.lastPosY = e.targetTouches[0].clientY;
+        const target = e.targetTouches[0];
+
+        this.startX = this.lastPos = target.clientX;
+        this.startY = this.lastPosY = target.clientY;
+
         this.startTime = new Date().getTime();
     }
 
     touchMove(e){
-        this.lastPosX = e.targetTouches[0].clientX;
+        const target = e.targetTouches[0];
+
+        this.lastPosX = target.clientX;
         this.lastPosY = this.lastPosY = e.targetTouches[0].clientY;
 
         this.props.slideIn(this.startX - this.lastPosX);

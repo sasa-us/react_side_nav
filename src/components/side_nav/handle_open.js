@@ -23,8 +23,10 @@ class HandleOpen extends Component {
     }
 
     touchMove(e){
-        this.lastPosX = e.targetTouches[0].clientX;
-        this.lastPosY = e.targetTouches[0].clientY;
+        const touch = e.targetTouches[0];
+
+        this.lastPosX = touch.clientX;
+        this.lastPosY = touch.clientY;
 
         this.props.slideOut(this.lastPosX - this.startX);
     }
@@ -59,8 +61,12 @@ HandleOpen.defaultProps = {
 };
 
 HandleOpen.propTypes = {
+    close: PropTypes.func.isRequired,
+    maxY: PropTypes.number.isRequired,
     minX: PropTypes.number.isRequired,
-    maxY: PropTypes.number.isRequired
+    open: PropTypes.func.isRequired,
+    slideOut: PropTypes.func.isRequired,
+    visible: PropTypes.bool.isRequired
 };
 
 export default HandleOpen;
