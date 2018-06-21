@@ -16,10 +16,14 @@ const Hamburger = props => {
     );
 }
 
+Hamburger.defaultProps = {
+    transition: 200
+};
+
 Hamburger.propTypes = {
     open: PropTypes.func.isRequired,
     transition: PropTypes.number.isRequired,
     visible: PropTypes.bool.isRequired
-}
+};
 
 export default Hamburger;
