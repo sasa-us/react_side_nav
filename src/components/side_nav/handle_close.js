@@ -27,7 +27,7 @@ class HandleClose extends Component {
         const target = e.targetTouches[0];
 
         this.lastPosX = target.clientX;
-        this.lastPosY = this.lastPosY = e.targetTouches[0].clientY;
+        this.lastPosY = target.clientY;
 
         this.props.slideIn(this.startX - this.lastPosX);
     }
@@ -69,8 +69,13 @@ HandleClose.defaultProps = {
 };
 
 HandleClose.propTypes = {
+    children: PropTypes.element.isRequired,
+    close: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
     minX: PropTypes.number.isRequired,
-    maxY: PropTypes.number.isRequired
+    maxY: PropTypes.number.isRequired,
+    open: PropTypes.func.isRequired,
+    slideIn: PropTypes.func.isRequired
 };
 
 export default HandleClose;
