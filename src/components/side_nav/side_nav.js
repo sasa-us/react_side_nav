@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class SideNav extends Component {
     linkClick(num) {
@@ -23,8 +24,13 @@ class SideNav extends Component {
                     &copy; 2018 LearningFuze
                         </div>
             </div>
-        )
+        );
     }
 }
+
+SideNav.propTypes = {
+    close: PropTypes.func.isRequired,
+    style: PropTypes.object.isRequired
+};
 
 export default SideNav;

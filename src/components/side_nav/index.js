@@ -177,6 +177,6 @@ SideNavContainer.propTypes = {
     hiddenNavMaxScreenWidth: PropTypes.number.isRequired,
     defaultTransition: PropTypes.number.isRequired,
     maxTransition: PropTypes.number.isRequired
-}
+};
 
 export default SideNavContainer;
