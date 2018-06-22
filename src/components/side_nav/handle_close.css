@@ -1,5 +1,5 @@
 .side-nav-close {
-    position: fixed;
     height: 100vh;
+    position: fixed;
     width: 300px;
 }
