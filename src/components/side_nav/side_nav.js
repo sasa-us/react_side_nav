@@ -22,7 +22,7 @@ class SideNav extends Component {
                 </ul>
                 <div className="footer">
                     &copy; 2018 LearningFuze
-                        </div>
+                </div>
             </div>
         );
     }
